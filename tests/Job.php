@@ -23,6 +23,5 @@ class Job extends \Pool\Job\AbstractJob
             md5(uniqid('', true));
         }
         echo $text . 'ended' . PHP_EOL;
-        sleep(10);
     }
 }
