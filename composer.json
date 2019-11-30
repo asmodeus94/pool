@@ -1,0 +1,32 @@
+{
+    "name": "asmodeus94/pool",
+    "description": "Process concurrency management",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Radosław Adamowicz",
+            "email": "r.adamowicz4@wp.pl"
+        }
+    ],
+    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:asmodeus94/pool.git"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "ext-pcntl": "*",
+        "ext-posix": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pool\\": "src/Pool"
+        },
+        "exclude-from-classmap": [
+            "tests"
+        ]
+    }
+}
