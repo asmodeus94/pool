@@ -94,7 +94,7 @@ class JobConfig
      *
      * @return $this
      */
-    public function setData($data)
+    public function setData($data): JobConfig
     {
         $this->data = is_array($data) && empty($data) ? null : $data;
 
