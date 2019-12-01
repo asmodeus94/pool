@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/../../../autoload.php';
-require 'Job.php';
+require __DIR__ . '/Job.php';
 
 try {
     $pool = new \Pool\Pool(2);
