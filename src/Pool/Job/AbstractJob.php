@@ -72,10 +72,10 @@ abstract class AbstractJob
     }
 
     /**
-     * Wykonuje zlecone zadanie
+     * Uruchamia zlecone zadanie
      *
      * @return void
      * @throws JobException
      */
-    abstract public function make(): void;
+    abstract public function run(): void;
 }

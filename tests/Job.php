@@ -8,7 +8,7 @@ class Job extends \Pool\Job\AbstractJob
      * @return void
      * @throws JobException
      */
-    public function make(): void
+    public function run(): void
     {
         $nOfEle = (int)$this->getData();
 

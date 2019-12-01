@@ -4,6 +4,7 @@ namespace Pool;
 
 
 use Pool\Job\AbstractJob;
+use Pool\Job\JobConfig;
 use Pool\Job\JobException;
 use Pool\Traits\ProcessManagementTrait;
 use ReflectionClass;
@@ -20,7 +21,7 @@ class Pool
     protected static $jobsCounter;
 
     /**
-     * @var array
+     * @var JobConfig[]
      */
     protected $jobs = [];
 
@@ -38,9 +39,15 @@ class Pool
      * Pool constructor.
      *
      * @param int|null $maxChildren Liczba określająca maksymalna liczbę uruchomionych procesów-dzieci
+     *
+     * @throws RuntimeException
      */
     public function __construct(?int $maxChildren = null)
     {
+        if ('cli' !== php_sapi_name()) {
+            throw new RuntimeException(__CLASS__ . ' class is available only in CLI mode');
+        }
+
         $this->maxChildren = $maxChildren <= 0 ? null : $maxChildren;
         self::$jobsCounter = 0;
     }
@@ -48,20 +55,13 @@ class Pool
     /**
      * Ustawia zadanie
      *
-     * @param string $jobClassName Nazwa klasy zadania
-     * @param mixed  $data         Dane, które zostaną przekazane do zadania w chwili jego powołania
+     * @param JobConfig $job Konfiguracja zadania
      *
      * @return $this
-     * @throws ReflectionException|RuntimeException
      */
-    public function setJob(string $jobClassName, $data = null): Pool
+    public function setJob(JobConfig $job): Pool
     {
-        $reflection = new ReflectionClass($jobClassName);
-        if (!$reflection->isSubclassOf(AbstractJob::class)) {
-            throw new RuntimeException(sprintf('Job class (%s) must be an instance of %s', $jobClassName, AbstractJob::class));
-        }
-
-        $this->jobs[self::$jobsCounter++] = [$jobClassName, is_array($data) && empty($data) ? null : $data];
+        $this->jobs[self::$jobsCounter++] = $job;
 
         return $this;
     }
@@ -69,20 +69,14 @@ class Pool
     /**
      * Ustawia zadania
      *
-     * @param array $jobClassesNames Nazwy klas, pełniące rolę zadań
-     * @param array $dataSet         Parametry odpowiadające kolejnym klasom, które przekazane zostaną do zadania
+     * @param JobConfig[] $jobs Tablica konfiguracji zadań
      *
      * @return void
-     * @throws ReflectionException|RuntimeException
      */
-    public function setJobs(array $jobClassesNames = [], array $dataSet = []): void
+    public function setJobs(array $jobs = []): void
     {
-        if (count($jobClassesNames) !== count($dataSet)) {
-            throw new RuntimeException('Number of arguments in both arrays must be identical');
-        }
-
-        foreach ($jobClassesNames as $index => $jobClassName) {
-            $this->setJob($jobClassName, $dataSet[$index]);
+        foreach ($jobs as $job) {
+            $this->setJob($job);
         }
     }
 
@@ -95,7 +89,7 @@ class Pool
      *
      * @see pcntl_waitpid
      */
-    private function wait(int $PID): void
+    protected function wait(int $PID): void
     {
         $PID = pcntl_waitpid($PID, $status);
         unset($this->PIDs[$PID]);
@@ -106,7 +100,7 @@ class Pool
      *
      * @return void
      */
-    private function synchronize(): void
+    protected function synchronize(): void
     {
         foreach ($this->PIDs as $PID) {
             $this->wait($PID);
@@ -115,10 +109,10 @@ class Pool
 
     /**
      * Uruchamia zlecone zadania w osobnych procesach-dzieciach.
-     * Zwraca tablicę z numerami zadań (0..n-1) wraz z przypisanymi do nich PIDami procesów-dzieci
+     * Zwraca tablicę z numerami zadań (o numerach 0..n-1) wraz z przypisanymi do nich PIDami procesów-dzieci
      *
      * @return array
-     * @throws JobException
+     * @throws JobException|ReflectionException
      */
     public function run(): array
     {
@@ -140,10 +134,14 @@ class Pool
                     $jobsHistory[$jobId] = $this->PIDs[$PID] = $PID;
                 }
             } else {
-                [$className, $data] = $this->jobs[$jobId];
+                $job = $this->jobs[$jobId];
+                $className = $job->getClassName();
+                $data = $job->getData();
+                $constructorArguments = $job->getConstructorArguments();
 
                 /** @var AbstractJob $jobObject */
-                $jobObject = new $className();
+                $jobObject = empty($constructorArguments) ? new $className()
+                    : call_user_func_array([new ReflectionClass($className), 'newInstance'], $constructorArguments);
 
                 if (null !== $data) {
                     $jobObject->setData($data);
@@ -152,7 +150,7 @@ class Pool
                 $jobObject->setJobId($jobId);
 
                 try {
-                    $jobObject->make();
+                    $jobObject->run();
                 } catch (JobException $e) {
                     $e->modifyMessage($jobId, $jobObject->getPID());
                     throw $e;
