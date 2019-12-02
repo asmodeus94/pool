@@ -37,8 +37,6 @@ class JobConfig
      * @param string $className
      * @param mixed  $dataSet
      * @param mixed  $constructorArguments
-     *
-     * @throws ReflectionException
      */
     public function __construct(string $className, $dataSet = null, array $constructorArguments = [])
     {
@@ -63,13 +61,11 @@ class JobConfig
      * @param string $className
      *
      * @return $this
-     * @throws ReflectionException
      */
     public function setClassName(string $className): JobConfig
     {
-        $reflection = new ReflectionClass($className);
-        if (!$reflection->isSubclassOf(AbstractJob::class)) {
-            throw new RuntimeException(sprintf('Job class (%s) must be an instance of %s', $className, AbstractJob::class));
+        if (!is_subclass_of($className, AbstractJob::class)) {
+            throw new RuntimeException(sprintf('Job class %s must inherit from %s', $className, AbstractJob::class));
         }
 
         $this->className = $className;
