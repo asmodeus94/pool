@@ -18,7 +18,7 @@ class Pool
     /**
      * @var int
      */
-    protected static $jobsCounter;
+    protected $jobsCounter = 0;
 
     /**
      * @var JobConfig[]
@@ -49,7 +49,6 @@ class Pool
         }
 
         $this->maxChildren = $maxChildren <= 0 ? null : $maxChildren;
-        self::$jobsCounter = 0;
     }
 
     /**
@@ -61,7 +60,7 @@ class Pool
      */
     public function setJob(JobConfig $job): Pool
     {
-        $this->jobs[self::$jobsCounter++] = $job;
+        $this->jobs[$this->jobsCounter++] = $job;
 
         return $this;
     }
