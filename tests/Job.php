@@ -34,19 +34,19 @@ class Job extends \Pool\Job\AbstractJob
     public function run(): void
     {
         $nOfEle = (int)$this->getData();
+        $this->setName($this->getName() . ' ' . $this->param1 . ' ' . $this->param2);
+        $text = "job {$this->getJobId()} {$this->getName()} with PID {$this->getPID()} and parent PID {$this->getParentPID()} ";
+        echo $text . 'started' . PHP_EOL;
 
         if (4 === $nOfEle) {
             throw new JobException('An error occurred test...');
         }
 
-        $this->setName($this->getName() . ' ' . $this->param1 . ' ' . $this->param2);
-
         $nOfEle = 10 ** $nOfEle;
-        $text = "job {$this->getJobId()} {$this->getName()} with PID {$this->getPID()} and parent PID {$this->getParentPID()} ";
-        echo $text . 'started' . PHP_EOL;
         for ($i = 0; $i < $nOfEle; $i++) {
             md5(uniqid('', true));
         }
+
         sleep(5);
         echo $text . 'ended' . PHP_EOL;
         echo memory_get_peak_usage() / 1024 / 1024 . PHP_EOL;

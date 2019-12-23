@@ -82,16 +82,18 @@ class Pool
     /**
      * Czeka na zakończenie podanego procesu
      *
-     * @param int $PID Id procesu lub -1 oznaczające dowolne dziecko bieżącego procesu
+     * @param int $PID Id procesu lub 0 oznaczające dowolne dziecko bieżącego procesu
      *
-     * @return void
+     * @return int
      *
      * @see pcntl_waitpid
      */
-    protected function wait(int $PID): void
+    protected function wait(int $PID): int
     {
         $PID = pcntl_waitpid($PID, $status);
         unset($this->PIDs[$PID]);
+
+        return $PID;
     }
 
     /**
@@ -101,9 +103,7 @@ class Pool
      */
     protected function synchronize(): void
     {
-        foreach ($this->PIDs as $PID) {
-            $this->wait($PID);
-        }
+        while (-1 !== $this->wait(0)) ;
     }
 
     /**
@@ -121,7 +121,7 @@ class Pool
 
         for ($jobId = 0; $jobId < $numberOfJobs; $jobId++) {
             if (count($this->PIDs) >= $this->maxChildren) {
-                $this->wait(-1);
+                $this->wait(0);
             }
 
             $PID = pcntl_fork();

@@ -8,7 +8,7 @@ try {
         $pool->setJob(new \Pool\Job\JobConfig(Job::class, $value, [md5($value), md5($value ** 10)]));
     }
     $pool->setName('master');
-    $pool->run();
+    var_dump($pool->run());
 } catch (\Pool\Job\JobException|Exception $e) {
     echo $e->getMessage() . PHP_EOL;
 }
