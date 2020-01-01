@@ -8,10 +8,10 @@ use Exception;
 class JobException extends Exception
 {
     /**
-     * Modyfikuje komunikat wyjątku
+     * Modifies the exception message
      *
-     * @param int $jobId Id zadania
-     * @param int $PID   Id procesu
+     * @param int $jobId Job id
+     * @param int $PID   Process id
      *
      * @return void
      */

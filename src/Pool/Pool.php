@@ -38,7 +38,7 @@ class Pool
     /**
      * Pool constructor.
      *
-     * @param int|null $maxChildren Liczba określająca maksymalna liczbę uruchomionych procesów-dzieci
+     * @param int|null $maxChildren Number specifying the maximum number of children's processes running
      *
      * @throws RuntimeException
      */
@@ -52,9 +52,9 @@ class Pool
     }
 
     /**
-     * Ustawia zadanie
+     * Sets job
      *
-     * @param JobConfig $job Konfiguracja zadania
+     * @param JobConfig $job Job configuration
      *
      * @return $this
      */
@@ -66,23 +66,25 @@ class Pool
     }
 
     /**
-     * Ustawia zadania
+     * Sets jobs
      *
-     * @param JobConfig[] $jobs Tablica konfiguracji zadań
+     * @param JobConfig[] $jobs Array of jobs configuration
      *
-     * @return void
+     * @return Pool
      */
-    public function setJobs(array $jobs = []): void
+    public function setJobs(array $jobs = []): Pool
     {
         foreach ($jobs as $job) {
             $this->setJob($job);
         }
+
+        return $this;
     }
 
     /**
-     * Czeka na zakończenie podanego procesu
+     * Waiting for the specified process to complete
      *
-     * @param int $PID Id procesu lub 0 oznaczające dowolne dziecko bieżącego procesu
+     * @param int $PID Process Id or 0 to identify any child of the current process
      *
      * @return int
      *
@@ -97,7 +99,7 @@ class Pool
     }
 
     /**
-     * Oczekuje na zakończenie wszystkich procesów
+     * Awaiting completion of all processes
      *
      * @return void
      */
@@ -107,8 +109,8 @@ class Pool
     }
 
     /**
-     * Uruchamia zlecone zadania w osobnych procesach-dzieciach.
-     * Zwraca tablicę z numerami zadań (o numerach 0..n-1) wraz z przypisanymi do nich PIDami procesów-dzieci
+     * Runs the assigned tasks in separate child processes.
+     * Returns an array with jobs numbers (0..n-1) along with the PIDs of child processes
      *
      * @return array
      * @throws JobException|ReflectionException

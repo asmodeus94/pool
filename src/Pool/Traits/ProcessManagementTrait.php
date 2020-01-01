@@ -6,7 +6,7 @@ namespace Pool\Traits;
 trait ProcessManagementTrait
 {
     /**
-     * Pobiera PID bieżącego procesu
+     * Returns the PID of the current process
      *
      * @return int
      */
@@ -16,7 +16,7 @@ trait ProcessManagementTrait
     }
 
     /**
-     * Zwraca PID rodzica bieżącego procesu
+     * Returns the PID of the parent of the current process
      *
      * @return int
      */
@@ -26,7 +26,7 @@ trait ProcessManagementTrait
     }
 
     /**
-     * Ustawia nazwę bieżącego procesu
+     * Sets the name of the current process
      *
      * @param string $title
      *
@@ -38,7 +38,7 @@ trait ProcessManagementTrait
     }
 
     /**
-     * Zwraca nazwę bieżącego procesu
+     * Returns the name of the current process
      *
      * @return string
      */

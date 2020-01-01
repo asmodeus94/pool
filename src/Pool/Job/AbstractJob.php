@@ -10,21 +10,21 @@ abstract class AbstractJob
     use ProcessManagementTrait;
 
     /**
-     * Dane odróżniające/sterujące bieżącym zadaniem
+     * Data that distinguish/controls the current job
      *
      * @var mixed
      */
     private $data;
 
     /**
-     * Id bieżącego zadania
+     * Id of current job
      *
      * @var int
      */
     private $jobId;
 
     /**
-     * UStawia dane nadające cechy odróżniające bieżące zadanie od innych
+     * Sets data that gives characteristics that distinguish the current job from others
      *
      * @param mixed $data
      *
@@ -38,7 +38,7 @@ abstract class AbstractJob
     }
 
     /**
-     * Zwraca dane bieżącego zadania
+     * Returns the data passed to the current job
      *
      * @return mixed
      */
@@ -48,7 +48,7 @@ abstract class AbstractJob
     }
 
     /**
-     * Ustawia id bieżącego zadania
+     * Sets the id of the current job
      *
      * @param int $jobId
      *
@@ -62,7 +62,7 @@ abstract class AbstractJob
     }
 
     /**
-     * Zwraca id bieżącego zadania
+     * Returns the id of the current job
      *
      * @return int
      */
@@ -72,7 +72,7 @@ abstract class AbstractJob
     }
 
     /**
-     * Uruchamia zlecone zadanie
+     * Starts job
      *
      * @return void
      * @throws JobException

@@ -1,8 +1,11 @@
 <?php
 
+namespace Pool\Tests\Fixtures;
+
+use Pool\Job\AbstractJob;
 use Pool\Job\JobException;
 
-class Job extends \Pool\Job\AbstractJob
+class Job extends AbstractJob
 {
     /**
      * @var string
@@ -24,7 +27,6 @@ class Job extends \Pool\Job\AbstractJob
     {
         $this->param1 = $param1;
         $this->param2 = $param2;
-        echo "{$this->getPID()} param1: $param1; param2: $param2" . PHP_EOL;
     }
 
     /**
@@ -34,9 +36,9 @@ class Job extends \Pool\Job\AbstractJob
     public function run(): void
     {
         $nOfEle = (int)$this->getData();
-        $this->setName($this->getName() . ' ' . $this->param1 . ' ' . $this->param2);
+        $this->setName($this->getName() . ' ' . $this->param1 . ' ' . $this->param2 . ' ' . $nOfEle);
         $text = "job {$this->getJobId()} {$this->getName()} with PID {$this->getPID()} and parent PID {$this->getParentPID()} ";
-        echo $text . 'started' . PHP_EOL;
+        echo $text . PHP_EOL;
 
         if (4 === $nOfEle) {
             throw new JobException('An error occurred test...');
@@ -46,9 +48,5 @@ class Job extends \Pool\Job\AbstractJob
         for ($i = 0; $i < $nOfEle; $i++) {
             md5(uniqid('', true));
         }
-
-        sleep(5);
-        echo $text . 'ended' . PHP_EOL;
-        echo memory_get_peak_usage() / 1024 / 1024 . PHP_EOL;
     }
 }

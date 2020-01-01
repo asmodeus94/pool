@@ -8,21 +8,21 @@ use RuntimeException;
 class JobConfig
 {
     /**
-     * Nazwa klasy zadania
+     * Job class name
      *
      * @var string
      */
     private $className;
 
     /**
-     * Dane, które zostaną przekazane do zadania w chwili jego powołania
+     * Data to be provided to the job at the time of its call
      *
      * @var mixed
      */
     private $data;
 
     /**
-     * Tablica parametrów, jaka zostanie przekazana do konstruktora zadania, zanim te zostanie wywołane
+     * An array of parameters that will be passed to the job constructor before its called
      *
      * @var array
      */
@@ -44,7 +44,7 @@ class JobConfig
     }
 
     /**
-     * Zwraca nazwę klasy
+     * Returns the class name
      *
      * @return string
      */
@@ -54,7 +54,7 @@ class JobConfig
     }
 
     /**
-     * Ustawia nazwę klasy, której obiekt zostanie powołona do życia w ramach zadania
+     * Sets the name of the class whose object will be brought to life in the job
      *
      * @param string $className
      *
@@ -72,7 +72,7 @@ class JobConfig
     }
 
     /**
-     * Zwraca dane przekazane do zadania
+     * Returns the data passed to the job
      *
      * @return mixed
      */
@@ -82,7 +82,7 @@ class JobConfig
     }
 
     /**
-     * Ustawia dane jakie chcemy przekazać do zadania
+     * Sets the data we want to pass to the job
      *
      * @param mixed $data
      *
@@ -96,7 +96,7 @@ class JobConfig
     }
 
     /**
-     * Zwraca tablicę argumentów przekazanych do konstruktora zadania
+     * Returns an array of arguments given to the job's constructor
      *
      * @return array
      */
@@ -106,7 +106,7 @@ class JobConfig
     }
 
     /**
-     * Ustawia tablicę argumentów dla konstruktora zadania
+     * Sets up an array of arguments for the job constructor
      *
      * @param array $constructorArguments
      *

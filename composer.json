@@ -18,9 +18,17 @@
     "autoload": {
         "psr-4": {
             "Pool\\": "src/Pool"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pool\\Tests\\": "tests"
         },
         "exclude-from-classmap": [
             "tests"
         ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8"
     }
 }
