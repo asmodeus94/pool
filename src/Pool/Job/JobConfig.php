@@ -2,7 +2,6 @@
 
 namespace Pool\Job;
 
-
 use RuntimeException;
 
 class JobConfig

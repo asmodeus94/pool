@@ -2,7 +2,6 @@
 
 namespace Pool\Job;
 
-
 use Pool\Traits\ProcessManagementTrait;
 
 abstract class AbstractJob

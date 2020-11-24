@@ -16,7 +16,7 @@ class PoolTest extends TestCase
     {
         $pool = new Pool();
         foreach (range(1, 4) as $value) {
-            $this->assertInstanceOf(JobConfig::class, $job = $this->createJobConfig($value));
+            $this->assertInstanceOf(JobConfig::class, $job = $this->createJobConfig($value + 1));
             $this->assertInstanceOf(Pool::class, $pool->setJob($job));
         }
 
@@ -55,6 +55,13 @@ class PoolTest extends TestCase
             $this->assertIsInt($PID);
             $this->assertGreaterThan(0, $PID);
         }
+    }
+
+    public function testGetProcessName(): void
+    {
+        $pool = new Pool();
+
+        $this->assertSame(basename($pool->getName()), 'phpunit');
     }
 
     public function testCanChangeProcessName(): void

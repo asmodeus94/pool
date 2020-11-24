@@ -2,7 +2,6 @@
 
 namespace Pool\Job;
 
-
 use Exception;
 
 class JobException extends Exception

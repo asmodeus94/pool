@@ -2,7 +2,6 @@
 
 namespace Pool;
 
-
 use Pool\Job\AbstractJob;
 use Pool\Job\JobConfig;
 use Pool\Job\JobException;

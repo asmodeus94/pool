@@ -44,6 +44,6 @@ trait ProcessManagementTrait
      */
     public function getName(): string
     {
-        return cli_get_process_title();
+        return cli_get_process_title() ?: $_SERVER['argv'][0] ?? '';
     }
 }
